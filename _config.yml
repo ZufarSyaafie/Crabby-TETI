@@ -1,4 +1,5 @@
 
 title: Crabby-TETI
 description: Aplikasi untuk membuat tambak kepiting lebih produktif.
+baseurl: /Crabby-TETI
 theme: jekyll-theme-minimal

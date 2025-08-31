@@ -11,4 +11,4 @@ Fitur:
 KELOMPOK CrabbyTETI
 - Anggota 1 :    
 - Anggota 2 :  
-- Anggota 3 : Jonathan Alvarado Panjaitan-23/515661/TK/56706
+- Anggota 3 : Jonathan Alvarado Panjaitan - 23/515661/TK/56706

@@ -10,5 +10,5 @@ Fitur:
 
 KELOMPOK CrabbyTETI
 - Anggota 1 :    
-- Anggota 2 :  
+- Anggota 2 : Kistosi Al Ghifari -23/515523/TK/56680
 - Anggota 3 : Jonathan Alvarado Panjaitan - 23/515661/TK/56706

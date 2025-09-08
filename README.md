@@ -18,4 +18,4 @@ Kelompok CrabbyTETI
 
 Class Diagram:
 
-![Class Diagram](images/class-diagram.kpg)
+![Class Diagram](images/class-diagram.jpg)

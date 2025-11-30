@@ -17,8 +17,8 @@ namespace CrabbyTETI.Configuration
             "Host=aws-1-ap-southeast-1.pooler.supabase.com;" +
             "Port=6543;" +
             "Database=postgres;" +
-            "Username=postgres.tffeswefrjkrnkrkdgyl;" +  // Format: postgres.{project-ref}
-            "Password=padmanaba212;" +
+            "Username=postgres.YOUR-REF-NAME;" +  // Format: postgres.{project-ref}
+            "Password=YOUR-PASSWORD;" +
             "SSL Mode=Require;" +
             "Trust Server Certificate=true;" +
             "Timeout=30;" +
@@ -30,11 +30,11 @@ namespace CrabbyTETI.Configuration
         // Port: 5432 (Direct connection ke database)
         // Gunakan ini jika pooler tidak work
         private static string ConnectionStringDirect =
-            "Host=db.tffeswefrjkrnkrkdgyl.supabase.co;" +
+            "Host=db.YOUR-REF-NAME.supabase.co;" +
             "Port=5432;" +
             "Database=postgres;" +
             "Username=postgres;" +
-            "Password=padmanaba212;" +
+            "Password=YOUR-PASSWORD;" +
             "SSL Mode=Require;" +
             "Trust Server Certificate=true;" +
             "Timeout=30;" +
@@ -48,8 +48,8 @@ namespace CrabbyTETI.Configuration
             "Host=aws-1-ap-southeast-1.pooler.supabase.com;" +
             "Port=5432;" +
             "Database=postgres;" +
-            "Username=postgres.tffeswefrjkrnkrkdgyl;" +
-            "Password=padmanaba212;" +
+            "Username=postgres.YOUR-REF-NAME;" +
+            "Password=YOUR-PASSWORD;" +
             "SSL Mode=Require;" +
             "Trust Server Certificate=true;" +
             "Timeout=30;" +
@@ -65,7 +65,7 @@ namespace CrabbyTETI.Configuration
         // 4. Scroll ke "Connection String"
         // 5. Copy URI dan paste di bawah
         private static string ConnectionStringFromDashboard =
-            "postgresql://postgres.tffeswefrjkrnkrkdgyl:padmanaba212@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres";
+            "postgresql://postgres.YOUR-REF-NAME:YOUR-PASSWORD@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres";
 
         // ====================================================================
         // ACTIVE CONNECTION STRING - Ganti ini untuk switch mode
@@ -92,11 +92,11 @@ namespace CrabbyTETI.Configuration
         /// Gunakan ini jika Anda punya custom requirements
         /// </summary>
         public static string BuildConnectionString(
-            string host = "db.tffeswefrjkrnkrkdgyl.supabase.co",
+            string host = "db.YOUR-REF-NAME.supabase.co",
             int port = 5432,
             string database = "postgres",
             string username = "postgres",
-            string password = "padmanaba212",
+            string password = "YOUR-PASSWORD",
             string sslMode = "Require",
             int timeout = 30)
         {

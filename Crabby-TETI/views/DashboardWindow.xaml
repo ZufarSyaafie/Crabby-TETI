@@ -1,0 +1,487 @@
+<Window x:Class="CrabbyTETI.views.DashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:CrabbyTETI.Converters"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        Title="Crabby-TETI - Dashboard" 
+        Height="800" 
+        Width="1400"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Background="#F5F7FA">
+
+    <Window.Resources>
+        <!-- Converters -->
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        
+        <!-- Summary Card Style -->
+        <Style x:Key="SummaryCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#CCCCCC" BlurRadius="15" Opacity="0.3" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Card Title Style -->
+        <Style x:Key="CardTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+        </Style>
+
+        <!-- Card Value Style -->
+        <Style x:Key="CardValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#FF6B35"/>
+        </Style>
+
+        <!-- Table Header Style -->
+        <Style x:Key="TableHeader" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Padding" Value="10,15"/>
+            <Setter Property="Background" Value="#F8F9FA"/>
+        </Style>
+
+        <!-- Table Cell Style -->
+        <Style x:Key="TableCell" TargetType="TextBlock">
+            <Setter Property="Padding" Value="10,12"/>
+            <Setter Property="Foreground" Value="#555555"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Status Badge Style -->
+        <Style x:Key="StatusBadge" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="White" Padding="20,15">
+            <Border.Effect>
+                <DropShadowEffect Color="#DDDDDD" BlurRadius="10" Opacity="0.3" ShadowDepth="2"/>
+            </Border.Effect>
+            <Grid>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <!-- Logo -->
+                    <TextBlock Text="&#x1F980;" FontSize="32" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                    <StackPanel>
+                        <TextBlock Text="Crabby-TETI Dashboard" FontSize="22" FontWeight="Bold" Foreground="#333333"/>
+                        <TextBlock Text="Sistem Monitoring Tambak Kepiting" FontSize="12" Foreground="#999999"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <!-- Add Data Panen Button -->
+                    <Button Content="&#x1F4E6; Input Data Panen" 
+                            Command="{Binding AddPanenCommand}"
+                            Padding="15,8" 
+                            Margin="0,0,15,0"
+                            Background="#FF9800" 
+                            Foreground="White" 
+                            BorderThickness="0" 
+                            Cursor="Hand"
+                            FontWeight="SemiBold">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    CornerRadius="8" 
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#F57C00"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    
+                    <!-- Refresh Button -->
+                    <Button Content="&#x1F504; Refresh" 
+                            Command="{Binding RefreshCommand}"
+                            Padding="15,8" 
+                            Margin="0,0,15,0"
+                            Background="#4CAF50" 
+                            Foreground="White" 
+                            BorderThickness="0" 
+                            Cursor="Hand"
+                            FontWeight="SemiBold">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    CornerRadius="8" 
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#45A049"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- User Info -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,15,0">
+                        <Border Background="#FF6B35" 
+                                Width="40" 
+                                Height="40" 
+                                CornerRadius="20" 
+                                Margin="0,0,10,0">
+                            <TextBlock Text="{Binding UserDisplayName, StringFormat={}{0:1}}" 
+                                       FontSize="18" 
+                                       FontWeight="Bold" 
+                                       Foreground="White" 
+                                       HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{Binding UserDisplayName}" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#333333"/>
+                            <TextBlock Text="{Binding UserEmail}" 
+                                       FontSize="11" 
+                                       Foreground="#999999"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Logout Button -->
+                    <Button Content="Logout" 
+                            Command="{Binding LogoutCommand}"
+                            Padding="15,8" 
+                            Background="#F44336" 
+                            Foreground="White" 
+                            BorderThickness="0" 
+                            Cursor="Hand"
+                            FontWeight="SemiBold">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    CornerRadius="8" 
+                                                    Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#E53935"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20">
+            <StackPanel>
+                <!-- Summary Cards -->
+                <TextBlock Text="Dashboard Summary" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           Foreground="#333333" 
+                           Margin="10,10,10,20"/>
+                
+                <Grid Margin="0,0,0,30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Card 1: Total Tambak -->
+                    <Border Grid.Column="0" Style="{StaticResource SummaryCard}">
+                        <StackPanel>
+                            <TextBlock Text="&#x1F3DE;&#xFE0F; Total Tambak" Style="{StaticResource CardTitle}"/>
+                            <TextBlock Text="{Binding Summary.TotalTambakFormatted}" Style="{StaticResource CardValue}"/>
+                            <TextBlock Text="Tambak Aktif" FontSize="12" Foreground="#999999" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card 2: Rata-rata Suhu -->
+                    <Border Grid.Column="1" Style="{StaticResource SummaryCard}">
+                        <StackPanel>
+                            <TextBlock Text="&#x1F321;&#xFE0F; Rata-rata Suhu" Style="{StaticResource CardTitle}"/>
+                            <TextBlock Text="{Binding Summary.RataSuhuFormatted}" Style="{StaticResource CardValue}"/>
+                            <TextBlock Text="Celsius" FontSize="12" Foreground="#999999" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card 3: Rata-rata Salinitas -->
+                    <Border Grid.Column="2" Style="{StaticResource SummaryCard}">
+                        <StackPanel>
+                            <TextBlock Text="&#x1F4A7; Rata-rata Salinitas" Style="{StaticResource CardTitle}"/>
+                            <TextBlock Text="{Binding Summary.RataSalinitasFormatted}" Style="{StaticResource CardValue}"/>
+                            <TextBlock Text="Part per thousand" FontSize="12" Foreground="#999999" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card 4: Rata-rata pH -->
+                    <Border Grid.Column="3" Style="{StaticResource SummaryCard}">
+                        <StackPanel>
+                            <TextBlock Text="&#x2697;&#xFE0F; Rata-rata pH" Style="{StaticResource CardTitle}"/>
+                            <TextBlock Text="{Binding Summary.RataPhFormatted}" Style="{StaticResource CardValue}"/>
+                            <TextBlock Text="pH Level" FontSize="12" Foreground="#999999" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card 5: Total Panen Bulan Ini -->
+                    <Border Grid.Column="4" Style="{StaticResource SummaryCard}">
+                        <StackPanel>
+                            <TextBlock Text="&#x1F4E6; Total Panen" Style="{StaticResource CardTitle}"/>
+                            <TextBlock Text="{Binding Summary.TotalPanenFormatted}" Style="{StaticResource CardValue}"/>
+                            <TextBlock Text="Bulan ini (kg)" FontSize="12" Foreground="#999999" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Tabel Daftar Tambak -->
+                <TextBlock Text="Daftar Tambak &amp; Status" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           Foreground="#333333" 
+                           Margin="10,20,10,20"/>
+
+                <Border Background="White" 
+                        CornerRadius="12" 
+                        Margin="10" 
+                        Padding="0">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#CCCCCC" BlurRadius="15" Opacity="0.3" ShadowDepth="2"/>
+                    </Border.Effect>
+
+                    <DataGrid ItemsSource="{Binding TambakList}"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              GridLinesVisibility="None"
+                              HeadersVisibility="Column"
+                              RowBackground="White"
+                              AlternatingRowBackground="#F8F9FA"
+                              BorderThickness="0"
+                              CanUserResizeColumns="True"
+                              CanUserSortColumns="True"
+                              FontSize="13">
+                        
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#F8F9FA"/>
+                                <Setter Property="Foreground" Value="#333333"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Padding" Value="15,12"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="BorderBrush" Value="#E0E0E0"/>
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="15,10"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="DataGridCell">
+                                            <Border Padding="{TemplateBinding Padding}" 
+                                                    Background="{TemplateBinding Background}">
+                                                <ContentPresenter VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </DataGrid.CellStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nama Tambak" Binding="{Binding Nama}" Width="*"/>
+                            <DataGridTextColumn Header="Lokasi" Binding="{Binding Lokasi}" Width="1.5*"/>
+                            <DataGridTextColumn Header="Luas" Binding="{Binding LuasFormatted}" Width="100"/>
+                            <DataGridTextColumn Header="Kapasitas" Binding="{Binding KapasitasFormatted}" Width="120"/>
+                            
+                            <!-- Status Column with Custom Template -->
+                            <DataGridTemplateColumn Header="Status" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="12" 
+                                                Padding="10,5" 
+                                                Background="{Binding StatusColor}"
+                                                HorizontalAlignment="Center">
+                                            <TextBlock Text="{Binding Status}" 
+                                                       Foreground="White" 
+                                                       FontWeight="SemiBold" 
+                                                       FontSize="11"
+                                                       TextAlignment="Center"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <DataGridTemplateColumn Header="Suhu Terkini" Width="110">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="{Binding SuhuTerkini, StringFormat={}{0:F1}}"/>
+                                            <Run Text="&#176;C"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            
+                            <DataGridTemplateColumn Header="Salinitas" Width="110">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <Run Text="{Binding SalinitasTerkini, StringFormat={}{0:F1}}"/>
+                                            <Run Text=" ppt"/>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            
+                            <DataGridTemplateColumn Header="pH" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PhTerkini, StringFormat={}{0:F1}}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            
+                            <!-- New Columns: Panen Tahun Ini -->
+                            <DataGridTextColumn Header="Panen Tahun Ini" 
+                                                Binding="{Binding TotalPanenFormatted}" 
+                                                Width="130">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#FF6B35"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="TextAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <DataGridTextColumn Header="Pendapatan Tahun Ini" 
+                                                Binding="{Binding PendapatanFormatted}" 
+                                                Width="160">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="#4CAF50"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="TextAlignment" Value="Right"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+                <!-- Monitoring Chart -->
+                <TextBlock Text="Monitoring Chart (5 Jam Terakhir)" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           Foreground="#333333" 
+                           Margin="10,30,10,20"/>
+
+                <Border Background="White" 
+                        CornerRadius="12" 
+                        Margin="10" 
+                        Padding="30"
+                        Height="400">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#CCCCCC" BlurRadius="15" Opacity="0.3" ShadowDepth="2"/>
+                    </Border.Effect>
+
+                    <!-- Chart Placeholder (akan diganti dengan LiveCharts atau custom chart) -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Chart Legend -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,30,0">
+                                <Ellipse Width="15" Height="15" Fill="#FF5722" Margin="0,0,8,0"/>
+                                <TextBlock FontSize="13" Foreground="#666666" VerticalAlignment="Center">
+                                    <Run Text="Suhu ("/>
+                                    <Run Text="&#176;"/>
+                                    <Run Text="C)"/>
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,30,0">
+                                <Ellipse Width="15" Height="15" Fill="#2196F3" Margin="0,0,8,0"/>
+                                <TextBlock Text="Salinitas (ppt)" FontSize="13" Foreground="#666666" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="15" Height="15" Fill="#4CAF50" Margin="0,0,8,0"/>
+                                <TextBlock Text="pH" FontSize="13" Foreground="#666666" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- LiveCharts CartesianChart -->
+                        <lvc:CartesianChart Grid.Row="1"
+                                            Series="{Binding ChartSeries}"
+                                            XAxes="{Binding XAxes}"
+                                            YAxes="{Binding YAxes}"
+                                            TooltipPosition="Top"
+                                            LegendPosition="Hidden"/>
+                    </Grid>
+                </Border>
+
+                <!-- Footer Padding -->
+                <Border Height="30"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Loading Overlay -->
+        <Border Grid.RowSpan="2" 
+                Background="#80000000" 
+                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}"
+                Panel.ZIndex="999">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="&#x1F504;" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                <TextBlock Text="Loading Dashboard Data..." 
+                           FontSize="16" 
+                           Foreground="White" 
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
